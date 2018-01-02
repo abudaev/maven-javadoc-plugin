@@ -1280,7 +1280,6 @@ public class JavadocUtil
         File javaHome = null;
 
         // if maven.home is set, we can assume JAVA_HOME must be used for testing
-        
         if ( System.getProperty( "maven.home" ) == null )
         {
             // JEP220 (Java9) restructured the JRE/JDK runtime image
@@ -1299,7 +1298,14 @@ public class JavadocUtil
         {
             try
             {
-                javaHome = new File( CommandLineUtils.getSystemEnvVars().getProperty( "JAVA_HOME" ) );
+                String javaHomeValue = CommandLineUtils.getSystemEnvVars().getProperty( "JAVA_HOME" );
+                
+                if ( javaHomeValue == null )
+                {
+                    javaHomeValue = CommandLineUtils.getSystemEnvVars().getProperty( "java.home"  );
+                }
+                
+                javaHome = new File( javaHomeValue );
             }
             catch ( IOException e )
             {
